@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico de Liderazgo ✦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ── VARIABLES ───────────────────────────────────────────── */
+  :root {
+    --cream:   #FAF7F2;
+    --beige:   #F0E9DF;
+    --sand:    #E2D5C3;
+    --gold:    #B8964A;
+    --gold-d:  #8C6E2F;
+    --bark:    #3E2C1A;
+    --white:   #FFFFFF;
+    --text:    #2E2318;
+    --text-m:  #7A6A50;
+    --green:   #5A8A60;
+    --amber:   #C4883A;
+    --radius:  18px;
+    --shadow:  0 8px 40px rgba(80,50,20,.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ───────────────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: .4;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── DECO CIRCLES ────────────────────────────────────────── */
+  .deco {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .deco-1 {
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(184,150,74,.10), transparent 70%);
+    top: -130px; right: -110px;
+  }
+  .deco-2 {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(90,138,96,.08), transparent 70%);
+    bottom: -60px; left: -90px;
+  }
+
+  /* ── LAYOUT ──────────────────────────────────────────────── */
+  .app {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px 48px;
+  }
+
+  /* ── PROGRESS ────────────────────────────────────────────── */
+  .progress-wrap {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--sand);
+    z-index: 100;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-d));
+    transition: width .5s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+
+  /* ── CARD ────────────────────────────────────────────────── */
+  .card {
+    background: rgba(255,255,255,.84);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 520px;
+    margin-top: 48px;
+    padding: 44px 40px 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── SCREEN ANIMATION ────────────────────────────────────── */
+  .screen { display: none; animation: fadeUp .5s cubic-bezier(.4,0,.2,1) forwards; }
+  .screen.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── BRAND ───────────────────────────────────────────────── */
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  .brand-icon { font-size: 20px; line-height: 1; }
+  .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: .16em;
+    color: var(--gold-d);
+    text-transform: uppercase;
+  }
+
+  /* ── WELCOME ─────────────────────────────────────────────── */
+  .welcome-tag {
+    display: inline-block;
+    background: var(--beige);
+    border: 1px solid var(--sand);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--gold-d);
+    margin-bottom: 20px;
+  }
+  .welcome-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    line-height: 1.15;
+    font-weight: 300;
+    color: var(--bark);
+    margin-bottom: 14px;
+  }
+  .welcome-title em { font-style: italic; color: var(--gold-d); }
+  .welcome-sub {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-m);
+    font-weight: 300;
+    margin-bottom: 30px;
+  }
+  .features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+  .feature-row { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-m); font-weight: 300; }
+  .feature-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+  .divider { height: 1px; background: var(--sand); margin: 26px 0; opacity: .6; }
+  .time-note { text-align: center; font-size: 12px; color: var(--text-m); font-weight: 300; letter-spacing: .05em; margin-bottom: 22px; }
+
+  /* ── QUESTION META ───────────────────────────────────────── */
+  .q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .q-step { font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+  .q-number { font-size: 11px; color: var(--text-m); font-weight: 300; }
+
+  .block-label { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; margin-top: 4px; }
+  .block-line { flex: 1; height: 1px; background: var(--sand); }
+  .block-text { font-size: 10px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-d); white-space: nowrap; padding: 0 6px; }
+
+  .situational-box {
+    background: var(--beige);
+    border: 1px solid var(--sand);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text-m);
+    font-weight: 300;
+    font-style: italic;
+  }
+  .situational-box strong { font-weight: 500; color: var(--bark); font-style: normal; }
+
+  .breath-note {
+    display: inline-block;
+    background: var(--beige);
+    border: 1px solid var(--sand);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: var(--gold-d);
+    font-weight: 300;
+    margin-bottom: 14px;
+    letter-spacing: .03em;
+  }
+
+  .q-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--bark);
+    margin-bottom: 6px;
+  }
+  .q-sub { font-size: 13px; color: var(--text-m); font-weight: 300; margin-bottom: 22px; }
+
+  /* ── OPTION BUTTONS ──────────────────────────────────────── */
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .option-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border: 1.5px solid var(--sand);
+    border-radius: var(--radius);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Jost', sans-serif;
+    font-size: 14.5px;
+    font-weight: 300;
+    color: var(--text);
+    transition: all .22s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--beige), var(--cream));
+    opacity: 0;
+    transition: opacity .22s ease;
+  }
+  .option-btn:hover::before { opacity: 1; }
+  .option-btn:hover { border-color: var(--gold); transform: translateX(3px); }
+  .option-btn.selected {
+    border-color: var(--gold-d);
+    background: linear-gradient(135deg, var(--beige), rgba(226,213,195,.4));
+    color: var(--bark);
+    font-weight: 400;
+    transform: translateX(3px);
+  }
+  .option-btn.selected::before { opacity: 0; }
+  .option-check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--sand);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 10px;
+    color: transparent;
+    transition: all .22s ease;
+    position: relative; z-index: 1;
+  }
+  .option-btn.selected .option-check {
+    background: var(--gold-d);
+    border-color: var(--gold-d);
+    color: white;
+  }
+  .option-label { position: relative; z-index: 1; line-height: 1.4; }
+  .option-emoji { font-size: 17px; position: relative; z-index: 1; }
+
+  /* ── SCALE ───────────────────────────────────────────────── */
+  .scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-m); font-weight: 300; margin-bottom: 10px; }
+  .scale-track { display: flex; gap: 6px; margin-bottom: 28px; flex-wrap: wrap; }
+  .scale-btn {
+    flex: 1;
+    min-width: 36px;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    border: 1.5px solid var(--sand);
+    background: transparent;
+    color: var(--text-m);
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: 'Jost', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .scale-btn:hover { border-color: var(--gold); color: var(--gold-d); background: var(--beige); }
+  .scale-btn.selected {
+    background: linear-gradient(135deg, var(--gold), var(--gold-d));
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 14px rgba(184,150,74,.35);
+  }
+
+  /* ── PILLS (MULTI) ───────────────────────────────────────── */
+  .options-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .pill-btn {
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 1.5px solid var(--sand);
+    background: transparent;
+    color: var(--text-m);
+    font-family: 'Jost', sans-serif;
+    font-size: 13.5px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .pill-btn:hover { border-color: var(--gold); color: var(--gold-d); }
+  .pill-btn.selected { border-color: var(--gold-d); background: linear-gradient(135deg, var(--beige), rgba(226,213,195,.4)); color: var(--bark); font-weight: 500; }
+  .pill-btn.dimmed { opacity: .35; cursor: default; pointer-events: none; }
+
+  /* ── BUTTONS ─────────────────────────────────────────────── */
+  .btn-primary {
+    display: block;
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, var(--bark), var(--gold-d));
+    color: var(--cream);
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    cursor: pointer;
+    transition: all .25s ease;
+    box-shadow: 0 4px 20px rgba(62,44,26,.22);
+    text-align: center;
+    text-decoration: none;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(62,44,26,.30); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 14px 24px;
+    background: transparent;
+    color: rgba(250,247,242,.65);
+    border: 1.5px solid rgba(255,255,255,.25);
+    border-radius: var(--radius);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all .22s ease;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,.08); }
+
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-m);
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 22px;
+    transition: color .2s;
+  }
+  .btn-back:hover { color: var(--gold-d); }
+
+  /* ── LOADING ─────────────────────────────────────────────── */
+  .loading-screen { text-align: center; padding: 44px 0; }
+  .loading-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; color: var(--bark); margin-bottom: 8px; }
+  .loading-sub { font-size: 14px; color: var(--text-m); font-weight: 300; margin-bottom: 36px; }
+  .dots { display: flex; gap: 8px; justify-content: center; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: pulse 1.4s ease-in-out infinite; }
+  .dot:nth-child(2) { animation-delay: .22s; }
+  .dot:nth-child(3) { animation-delay: .44s; }
+  @keyframes pulse {
+    0%,100% { opacity: .25; transform: scale(.8); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+
+  /* ── DIAGNOSIS ───────────────────────────────────────────── */
+  .diag-header { text-align: center; margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--sand); }
+  .diag-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, var(--beige), var(--sand));
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--gold-d);
+    margin-bottom: 18px;
+  }
+  .diag-level-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .level-ready    { background: #e8f5ea; color: #2d7a3a; border: 1.5px solid #a8d4ae; }
+  .level-blocked  { background: #fff8e8; color: #8a6210; border: 1.5px solid #d4b870; }
+  .level-notready { background: #fdf0f0; color: #9a3a3a; border: 1.5px solid #d4a0a0; }
+
+  .diag-emoji { font-size: 46px; margin-bottom: 10px; }
+  .diag-title { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 400; color: var(--bark); line-height: 1.2; margin-bottom: 8px; }
+  .diag-subtitle { font-size: 14px; color: var(--text-m); font-weight: 300; line-height: 1.65; }
+
+  .diag-section { background: var(--beige); border-radius: 16px; padding: 20px 22px; margin-bottom: 12px; border: 1px solid rgba(226,213,195,.6); }
+  .diag-section-title { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; color: var(--gold-d); margin-bottom: 10px; }
+  .diag-section-icon { font-size: 15px; }
+  .diag-text { font-size: 14px; line-height: 1.78; color: var(--text); font-weight: 300; }
+  .diag-text strong { font-weight: 500; color: var(--bark); }
+
+  /* ── PLAN STEPS ──────────────────────────────────────────── */
+  .plan-step {
+    display: flex;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(226,213,195,.5);
+    align-items: flex-start;
+  }
+  .plan-step:last-child { border-bottom: none; padding-bottom: 0; }
+  .plan-step-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-d));
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .plan-step-text { font-size: 13.5px; color: var(--text); font-weight: 300; line-height: 1.65; }
+  .plan-step-text strong { font-weight: 500; color: var(--bark); }
+
+  /* ── CTA BOX ─────────────────────────────────────────────── */
+  .cta-box { background: linear-gradient(135deg, var(--bark), var(--gold-d)); border-radius: 20px; padding: 28px 24px; margin: 20px 0 16px; text-align: center; }
+  .cta-box-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--cream); line-height: 1.35; margin-bottom: 8px; }
+  .cta-box-sub { font-size: 13px; color: rgba(250,247,242,.72); font-weight: 300; margin-bottom: 22px; line-height: 1.65; }
+  .btn-wa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px 24px;
+    background: #25D366;
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all .25s;
+    box-shadow: 0 4px 20px rgba(37,211,102,.28);
+    margin-bottom: 10px;
+  }
+  .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,.4); }
+
+  /* ── THANKS ──────────────────────────────────────────────── */
+  .thankyou-center { text-align: center; padding: 24px 0; }
+  .thankyou-icon { font-size: 52px; margin-bottom: 18px; }
+  .thankyou-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; color: var(--bark); margin-bottom: 12px; }
+  .thankyou-sub { font-size: 15px; color: var(--text-m); font-weight: 300; line-height: 1.7; }
+
+  /* ── FOOTER ──────────────────────────────────────────────── */
+  .footer { margin-top: 24px; font-size: 12px; color: var(--text-m); font-weight: 300; text-align: center; letter-spacing: .04em; position: relative; z-index: 1; }
+
+  @media (max-width: 480px) {
+    .card { padding: 32px 22px 28px; margin-top: 36px; }
+    .welcome-title { font-size: 32px; }
+    .scale-track { gap: 4px; }
+    .scale-btn { font-size: 12px; min-width: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="deco deco-1"></div>
+<div class="deco deco-2"></div>
+
+<div class="app">
+<div class="card">
+
+  <!-- ══════════════════════════════════════ BIENVENIDA -->
+  <div class="screen active" id="screen-0">
+    <div class="brand">
+      <span class="brand-icon">✦</span>
+      <span class="brand-name">Diagnóstico de Liderazgo</span>
+    </div>
+    <span class="welcome-tag">✦ Para líderes con visión</span>
+    <h1 class="welcome-title">¿Dónde estás<br><em>realmente hoy?</em></h1>
+    <p class="welcome-sub">Esta encuesta está diseñada para ser tu espejo más honesto. Responde con la verdad y descubre exactamente en dónde estás y qué necesitas para avanzar.</p>
+    <div class="features">
+      <div class="feature-row"><div class="feature-dot"></div>Identifica tus bloqueos reales</div>
+      <div class="feature-row"><div class="feature-dot"></div>Evalúa tu mentalidad y disciplina</div>
+      <div class="feature-row"><div class="feature-dot"></div>Descubre tu nivel de acción</div>
+      <div class="feature-row"><div class="feature-dot"></div>Recibe un diagnóstico personalizado</div>
+      <div class="feature-row"><div class="feature-dot"></div>Obtén tu plan de acción inmediato</div>
+    </div>
+    <div class="divider"></div>
+    <p class="time-note">13 preguntas · 5 minutos · Resultados inmediatos</p>
+    <button class="btn-primary" onclick="goTo(1)">Comenzar mi diagnóstico →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P1 · SATISFACCIÓN -->
+  <div class="screen" id="screen-1">
+    <button class="btn-back" onclick="goTo(0)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 1 de 13</span><span class="q-number">8%</span></div>
+    <div class="block-label"><div class="block-line"></div><span class="block-text">Estado actual</span><div class="block-line"></div></div>
+    <h2 class="q-title">¿Qué tan satisfecha estás con tu vida actualmente?</h2>
+    <p class="q-sub">1 = nada satisfecha &nbsp;·&nbsp; 10 = completamente plena</p>
+    <div class="scale-labels"><span>Nada satisfecha</span><span>Completamente plena</span></div>
+    <div class="scale-track" id="scale-1">
+      <button class="scale-btn" onclick="selectScale(1,1,event)">1</button>
+      <button class="scale-btn" onclick="selectScale(1,2,event)">2</button>
+      <button class="scale-btn" onclick="selectScale(1,3,event)">3</button>
+      <button class="scale-btn" onclick="selectScale(1,4,event)">4</button>
+      <button class="scale-btn" onclick="selectScale(1,5,event)">5</button>
+      <button class="scale-btn" onclick="selectScale(1,6,event)">6</button>
+      <button class="scale-btn" onclick="selectScale(1,7,event)">7</button>
+      <button class="scale-btn" onclick="selectScale(1,8,event)">8</button>
+      <button class="scale-btn" onclick="selectScale(1,9,event)">9</button>
+      <button class="scale-btn" onclick="selectScale(1,10,event)">10</button>
+    </div>
+    <button class="btn-primary" id="next-1" onclick="goTo(2)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P2 · ESTADO EMOCIONAL -->
+  <div class="screen" id="screen-2">
+    <button class="btn-back" onclick="goTo(1)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 2 de 13</span><span class="q-number">15%</span></div>
+    <h2 class="q-title">¿Cómo te has sentido últimamente?</h2>
+    <p class="q-sub">Elige la opción que más te representa.</p>
+    <div class="options" id="opts-2">
+      <button class="option-btn" onclick="select(2,'Estancada',event)"><span class="option-check">✓</span><span class="option-emoji">🧱</span><span class="option-label">Estancada — siento que no avanzo</span></button>
+      <button class="option-btn" onclick="select(2,'Ansiosa',event)"><span class="option-check">✓</span><span class="option-emoji">😰</span><span class="option-label">Ansiosa — todo me genera presión</span></button>
+      <button class="option-btn" onclick="select(2,'Confundida',event)"><span class="option-check">✓</span><span class="option-emoji">🌫️</span><span class="option-label">Confundida — no sé por dónde empezar</span></button>
+      <button class="option-btn" onclick="select(2,'Motivada',event)"><span class="option-check">✓</span><span class="option-emoji">🔥</span><span class="option-label">Motivada pero sin una ruta clara</span></button>
+      <button class="option-btn" onclick="select(2,'Sin rumbo',event)"><span class="option-check">✓</span><span class="option-emoji">🧭</span><span class="option-label">Sin rumbo — voy donde el viento me lleva</span></button>
+      <button class="option-btn" onclick="select(2,'Enfocada',event)"><span class="option-check">✓</span><span class="option-emoji">🎯</span><span class="option-label">Enfocada y en acción</span></button>
+    </div>
+    <button class="btn-primary" id="next-2" onclick="goTo(3)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P3 · BLOQUEOS -->
+  <div class="screen" id="screen-3">
+    <button class="btn-back" onclick="goTo(2)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 3 de 13</span><span class="q-number">23%</span></div>
+    <div class="block-label"><div class="block-line"></div><span class="block-text">Bloqueos</span><div class="block-line"></div></div>
+    <div class="breath-note">🌬️ Sé honesta contigo misma.</div>
+    <h2 class="q-title">¿Qué sientes que hoy no te está dejando avanzar?</h2>
+    <div class="options" id="opts-3">
+      <button class="option-btn" onclick="select(3,'Miedo a fallar',event)"><span class="option-check">✓</span><span class="option-emoji">😨</span><span class="option-label">Miedo a fallar o al qué dirán</span></button>
+      <button class="option-btn" onclick="select(3,'Falta de tiempo',event)"><span class="option-check">✓</span><span class="option-emoji">⏰</span><span class="option-label">Falta de tiempo — siempre estoy ocupada</span></button>
+      <button class="option-btn" onclick="select(3,'Falta de dinero',event)"><span class="option-check">✓</span><span class="option-emoji">💸</span><span class="option-label">Falta de dinero o recursos</span></button>
+      <button class="option-btn" onclick="select(3,'Inseguridad',event)"><span class="option-check">✓</span><span class="option-emoji">🪞</span><span class="option-label">Inseguridad — no me creo suficiente</span></button>
+      <button class="option-btn" onclick="select(3,'No sé cómo',event)"><span class="option-check">✓</span><span class="option-emoji">🗺️</span><span class="option-label">No sé cómo dar el siguiente paso</span></button>
+      <button class="option-btn" onclick="select(3,'Falta de apoyo',event)"><span class="option-check">✓</span><span class="option-emoji">🤝</span><span class="option-label">Falta de apoyo o red de personas</span></button>
+    </div>
+    <button class="btn-primary" id="next-3" onclick="goTo(4)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P4 · CAMBIO DESEADO -->
+  <div class="screen" id="screen-4">
+    <button class="btn-back" onclick="goTo(3)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 4 de 13</span><span class="q-number">30%</span></div>
+    <div class="block-label"><div class="block-line"></div><span class="block-text">Deseos</span><div class="block-line"></div></div>
+    <h2 class="q-title">Si pudieras cambiar algo de tu vida en este momento, ¿qué sería?</h2>
+    <div class="options" id="opts-4">
+      <button class="option-btn" onclick="select(4,'Mis ingresos',event)"><span class="option-check">✓</span><span class="option-emoji">💰</span><span class="option-label">Mis ingresos y estabilidad económica</span></button>
+      <button class="option-btn" onclick="select(4,'Mi mentalidad',event)"><span class="option-check">✓</span><span class="option-emoji">🧠</span><span class="option-label">Mi mentalidad y autoconfianza</span></button>
+      <button class="option-btn" onclick="select(4,'Mi salud',event)"><span class="option-check">✓</span><span class="option-emoji">💪</span><span class="option-label">Mi salud, energía y bienestar</span></button>
+      <button class="option-btn" onclick="select(4,'Mi negocio',event)"><span class="option-check">✓</span><span class="option-emoji">🚀</span><span class="option-label">Tener o crecer mi propio negocio</span></button>
+      <button class="option-btn" onclick="select(4,'Mis relaciones',event)"><span class="option-check">✓</span><span class="option-emoji">💞</span><span class="option-label">Mis relaciones y entorno</span></button>
+      <button class="option-btn" onclick="select(4,'Mi propósito',event)"><span class="option-check">✓</span><span class="option-emoji">✨</span><span class="option-label">Encontrar mi propósito real</span></button>
+    </div>
+    <button class="btn-primary" id="next-4" onclick="goTo(5)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P5 · METAS 6M -->
+  <div class="screen" id="screen-5">
+    <button class="btn-back" onclick="goTo(4)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 5 de 13</span><span class="q-number">38%</span></div>
+    <h2 class="q-title">¿Qué te gustaría lograr en los próximos 6 meses?</h2>
+    <p class="q-sub">Elige hasta 2 metas principales.</p>
+    <div class="options-pills" id="pills-5">
+      <button class="pill-btn" onclick="selectPill(5,'Generar más ingresos',2,event)">Generar más ingresos</button>
+      <button class="pill-btn" onclick="selectPill(5,'Crear mi negocio',2,event)">Crear mi negocio</button>
+      <button class="pill-btn" onclick="selectPill(5,'Crecer en liderazgo',2,event)">Crecer en liderazgo</button>
+      <button class="pill-btn" onclick="selectPill(5,'Tener más libertad',2,event)">Tener más libertad</button>
+      <button class="pill-btn" onclick="selectPill(5,'Sanar mi mentalidad',2,event)">Sanar mi mentalidad</button>
+      <button class="pill-btn" onclick="selectPill(5,'Mejorar mi disciplina',2,event)">Mejorar mi disciplina</button>
+      <button class="pill-btn" onclick="selectPill(5,'Tener un equipo',2,event)">Construir un equipo</button>
+      <button class="pill-btn" onclick="selectPill(5,'Ganar reconocimiento',2,event)">Ganar reconocimiento</button>
+    </div>
+    <button class="btn-primary" id="next-5" onclick="goTo(6)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P6 · DISCIPLINA SITUACIONAL -->
+  <div class="screen" id="screen-6">
+    <button class="btn-back" onclick="goTo(5)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 6 de 13</span><span class="q-number">46%</span></div>
+    <div class="block-label"><div class="block-line"></div><span class="block-text">Disciplina</span><div class="block-line"></div></div>
+    <div class="situational-box">
+      <strong>Imagina esta situación…</strong><br>
+      Sabes exactamente lo que tienes que hacer para avanzar, pero llevas varios días sin hacerlo. Sé honesta: ¿qué suele pasar contigo en esos momentos?
+    </div>
+    <div class="options" id="opts-6">
+      <button class="option-btn" onclick="select(6,'Lo dejo para después',event)"><span class="option-check">✓</span><span class="option-emoji">⏸️</span><span class="option-label">Lo dejo para después — "mañana lo hago"</span></button>
+      <button class="option-btn" onclick="select(6,'Espero sentirme motivada',event)"><span class="option-check">✓</span><span class="option-emoji">💭</span><span class="option-label">Espero sentirme motivada para actuar</span></button>
+      <button class="option-btn" onclick="select(6,'Me frustro y abandono',event)"><span class="option-check">✓</span><span class="option-emoji">😞</span><span class="option-label">Me frustro y termino abandonando</span></button>
+      <button class="option-btn" onclick="select(6,'Retomo aunque no tenga ganas',event)"><span class="option-check">✓</span><span class="option-emoji">💪</span><span class="option-label">Retomo aunque no tenga ganas</span></button>
+      <button class="option-btn" onclick="select(6,'Cumplo sí o sí',event)"><span class="option-check">✓</span><span class="option-emoji">🔥</span><span class="option-label">Cumplo sí o sí — me lo prometí a mí misma</span></button>
+    </div>
+    <button class="btn-primary" id="next-6" onclick="goTo(7)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P7 · MENTALIDAD SITUACIONAL -->
+  <div class="screen" id="screen-7">
+    <button class="btn-back" onclick="goTo(6)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 7 de 13</span><span class="q-number">53%</span></div>
+    <div class="block-label"><div class="block-line"></div><span class="block-text">Mentalidad</span><div class="block-line"></div></div>
+    <div class="situational-box">
+      <strong>Imagina esta situación…</strong><br>
+      Ves a alguien que empezó después que tú y ya está teniendo resultados. ¿Cuál es tu reacción más honesta?
+    </div>
+    <div class="options" id="opts-7">
+      <button class="option-btn" onclick="select(7,'Me siento menos',event)"><span class="option-check">✓</span><span class="option-emoji">😔</span><span class="option-label">Me siento menos — me da vergüenza</span></button>
+      <button class="option-btn" onclick="select(7,'Me desanimo',event)"><span class="option-check">✓</span><span class="option-emoji">😩</span><span class="option-label">Me desanimo y pierdo las ganas</span></button>
+      <button class="option-btn" onclick="select(7,'Tuvo suerte',event)"><span class="option-check">✓</span><span class="option-emoji">🎲</span><span class="option-label">Pienso que tuvo suerte o ventajas</span></button>
+      <button class="option-btn" onclick="select(7,'Analizo qué hace diferente',event)"><span class="option-check">✓</span><span class="option-emoji">🔍</span><span class="option-label">Analizo qué está haciendo diferente</span></button>
+      <button class="option-btn" onclick="select(7,'Me inspira a mejorar',event)"><span class="option-check">✓</span><span class="option-emoji">🚀</span><span class="option-label">Me inspira — si ella pudo, yo también puedo</span></button>
+    </div>
+    <button class="btn-primary" id="next-7" onclick="goTo(8)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P8 · CREENCIA DINERO -->
+  <div class="screen" id="screen-8">
+    <button class="btn-back" onclick="goTo(7)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 8 de 13</span><span class="q-number">61%</span></div>
+    <div class="block-label"><div class="block-line"></div><span class="block-text">Creencias limitantes</span><div class="block-line"></div></div>
+    <div class="breath-note">✦ Sin filtros. ¿Qué crees tú sobre el dinero?</div>
+    <h2 class="q-title">¿Qué crees sobre ganar dinero?</h2>
+    <div class="options" id="opts-8">
+      <button class="option-btn" onclick="select(8,'Es difícil',event)"><span class="option-check">✓</span><span class="option-emoji">🧱</span><span class="option-label">Es difícil — no está hecho para todos</span></button>
+      <button class="option-btn" onclick="select(8,'Requiere demasiado esfuerzo',event)"><span class="option-check">✓</span><span class="option-emoji">😓</span><span class="option-label">Requiere demasiado sacrificio y esfuerzo</span></button>
+      <button class="option-btn" onclick="select(8,'Se puede generar inteligentemente',event)"><span class="option-check">✓</span><span class="option-emoji">💡</span><span class="option-label">Se puede generar de forma inteligente</span></button>
+      <button class="option-btn" onclick="select(8,'No sé cómo hacerlo',event)"><span class="option-check">✓</span><span class="option-emoji">❓</span><span class="option-label">No sé cómo generarlo de forma sostenida</span></button>
+    </div>
+    <button class="btn-primary" id="next-8" onclick="goTo(9)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P9 · ACCIÓN ACTUAL -->
+  <div class="screen" id="screen-9">
+    <button class="btn-back" onclick="goTo(8)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 9 de 13</span><span class="q-number">69%</span></div>
+    <div class="block-label"><div class="block-line"></div><span class="block-text">Nivel de acción</span><div class="block-line"></div></div>
+    <h2 class="q-title">¿Qué estás haciendo hoy para cambiar tu situación?</h2>
+    <div class="options" id="opts-9">
+      <button class="option-btn" onclick="select(9,'Acción diaria constante',event)"><span class="option-check">✓</span><span class="option-emoji">🔥</span><span class="option-label">Tengo acciones diarias y constantes</span></button>
+      <button class="option-btn" onclick="select(9,'Estoy empezando',event)"><span class="option-check">✓</span><span class="option-emoji">🌱</span><span class="option-label">Estoy empezando a dar los primeros pasos</span></button>
+      <button class="option-btn" onclick="select(9,'Solo lo pienso',event)"><span class="option-check">✓</span><span class="option-emoji">💭</span><span class="option-label">Lo pienso mucho pero no actúo</span></button>
+      <button class="option-btn" onclick="select(9,'No estoy haciendo nada',event)"><span class="option-check">✓</span><span class="option-emoji">⏸️</span><span class="option-label">Honestamente, no estoy haciendo nada</span></button>
+    </div>
+    <button class="btn-primary" id="next-9" onclick="goTo(10)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P10 · HABILIDADES -->
+  <div class="screen" id="screen-10">
+    <button class="btn-back" onclick="goTo(9)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 10 de 13</span><span class="q-number">76%</span></div>
+    <div class="block-label"><div class="block-line"></div><span class="block-text">Habilidades</span><div class="block-line"></div></div>
+    <h2 class="q-title">¿En qué sientes que eres buena?</h2>
+    <p class="q-sub">Selecciona todas las que apliquen.</p>
+    <div class="options-pills" id="pills-10">
+      <button class="pill-btn" onclick="selectPill(10,'Vender',5,event)">Vender</button>
+      <button class="pill-btn" onclick="selectPill(10,'Liderar personas',5,event)">Liderar personas</button>
+      <button class="pill-btn" onclick="selectPill(10,'Comunicar',5,event)">Comunicar</button>
+      <button class="pill-btn" onclick="selectPill(10,'Conectar con otros',5,event)">Conectar con otros</button>
+      <button class="pill-btn" onclick="selectPill(10,'Organizar',5,event)">Organizar</button>
+      <button class="pill-btn" onclick="selectPill(10,'Motivar',5,event)">Motivar a otros</button>
+      <button class="pill-btn" onclick="selectPill(10,'Crear contenido',5,event)">Crear contenido</button>
+      <button class="pill-btn" onclick="selectPill(10,'Resolver problemas',5,event)">Resolver problemas</button>
+      <button class="pill-btn" onclick="selectPill(10,'Enseñar',5,event)">Enseñar</button>
+    </div>
+    <button class="btn-primary" id="next-10" onclick="goTo(11)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P11 · COMPROMISO -->
+  <div class="screen" id="screen-11">
+    <button class="btn-back" onclick="goTo(10)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 11 de 13</span><span class="q-number">84%</span></div>
+    <div class="block-label"><div class="block-line"></div><span class="block-text">Compromiso</span><div class="block-line"></div></div>
+    <h2 class="q-title">¿Estás dispuesta a salir de tu zona de confort para crecer?</h2>
+    <div class="options" id="opts-11">
+      <button class="option-btn" onclick="select(11,'Sí, totalmente',event)"><span class="option-check">✓</span><span class="option-emoji">🔥</span><span class="option-label">Sí, totalmente — estoy lista para lo que sea</span></button>
+      <button class="option-btn" onclick="select(11,'Me cuesta pero lo intento',event)"><span class="option-check">✓</span><span class="option-emoji">💪</span><span class="option-label">Me cuesta pero lo intento — sigo intentando</span></button>
+      <button class="option-btn" onclick="select(11,'No estoy segura',event)"><span class="option-check">✓</span><span class="option-emoji">🌫️</span><span class="option-label">No estoy segura — me genera mucho miedo</span></button>
+      <button class="option-btn" onclick="select(11,'No',event)"><span class="option-check">✓</span><span class="option-emoji">🔒</span><span class="option-label">No — prefiero que las cosas sean como están</span></button>
+    </div>
+    <button class="btn-primary" id="next-11" onclick="goTo(12)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P12 · ESCALA URGENCIA -->
+  <div class="screen" id="screen-12">
+    <button class="btn-back" onclick="goTo(11)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 12 de 13</span><span class="q-number">92%</span></div>
+    <h2 class="q-title">¿Qué tan urgente sientes que necesitas un cambio en tu vida?</h2>
+    <p class="q-sub">1 = puede esperar &nbsp;·&nbsp; 10 = lo necesito ya</p>
+    <div class="scale-labels"><span>Puede esperar</span><span>Lo necesito ya</span></div>
+    <div class="scale-track" id="scale-12">
+      <button class="scale-btn" onclick="selectScale(12,1,event)">1</button>
+      <button class="scale-btn" onclick="selectScale(12,2,event)">2</button>
+      <button class="scale-btn" onclick="selectScale(12,3,event)">3</button>
+      <button class="scale-btn" onclick="selectScale(12,4,event)">4</button>
+      <button class="scale-btn" onclick="selectScale(12,5,event)">5</button>
+      <button class="scale-btn" onclick="selectScale(12,6,event)">6</button>
+      <button class="scale-btn" onclick="selectScale(12,7,event)">7</button>
+      <button class="scale-btn" onclick="selectScale(12,8,event)">8</button>
+      <button class="scale-btn" onclick="selectScale(12,9,event)">9</button>
+      <button class="scale-btn" onclick="selectScale(12,10,event)">10</button>
+    </div>
+    <button class="btn-primary" id="next-12" onclick="goTo(13)" disabled style="opacity:.4;cursor:not-allowed">Continuar →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ P13 · INVERSIÓN -->
+  <div class="screen" id="screen-13">
+    <button class="btn-back" onclick="goTo(12)">← Volver</button>
+    <div class="q-meta"><span class="q-step">Pregunta 13 de 13</span><span class="q-number">100%</span></div>
+    <h2 class="q-title">¿Estás dispuesta a invertir en tu crecimiento personal y profesional?</h2>
+    <p class="q-sub">Sé honesta. Esta respuesta no tiene respuesta incorrecta.</p>
+    <div class="options" id="opts-13">
+      <button class="option-btn" onclick="select(13,'Sí, es mi prioridad',event)"><span class="option-check">✓</span><span class="option-emoji">💎</span><span class="option-label">Sí — es mi prioridad y estoy lista</span></button>
+      <button class="option-btn" onclick="select(13,'Sí, pero necesito ver el valor',event)"><span class="option-check">✓</span><span class="option-emoji">🤔</span><span class="option-label">Sí, pero necesito entender el valor</span></button>
+      <button class="option-btn" onclick="select(13,'Quiero pero tengo limitaciones',event)"><span class="option-check">✓</span><span class="option-emoji">💬</span><span class="option-label">Quiero, pero tengo limitaciones económicas</span></button>
+      <button class="option-btn" onclick="select(13,'No por ahora',event)"><span class="option-check">✓</span><span class="option-emoji">⏸️</span><span class="option-label">No por ahora — prefiero esperar</span></button>
+    </div>
+    <button class="btn-primary" id="next-13" onclick="showLoading()" disabled style="opacity:.4;cursor:not-allowed">Ver mi diagnóstico →</button>
+  </div>
+
+  <!-- ══════════════════════════════════════ CARGANDO -->
+  <div class="screen" id="screen-loading">
+    <div class="loading-screen">
+      <p style="font-size:44px;margin-bottom:16px">✦</p>
+      <h2 class="loading-title">Analizando tu diagnóstico…</h2>
+      <p class="loading-sub">Calculando tu nivel de liderazgo</p>
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ DIAGNÓSTICO -->
+  <div class="screen" id="screen-diagnosis">
+    <div class="diag-header">
+      <div class="diag-badge">✦ Tu diagnóstico de liderazgo</div>
+      <div class="diag-level-badge" id="diag-level-badge">Nivel</div>
+      <div class="diag-emoji" id="diag-emoji">✨</div>
+      <h2 class="diag-title" id="diag-title">Tu perfil</h2>
+      <p class="diag-subtitle" id="diag-subtitle"></p>
+    </div>
+
+    <div class="diag-section">
+      <div class="diag-section-title"><span class="diag-section-icon">💌</span> Tu mensaje personal</div>
+      <p class="diag-text" id="diag-message" style="font-style:italic"></p>
+    </div>
+
+    <div class="diag-section">
+      <div class="diag-section-title"><span class="diag-section-icon">🔎</span> Lo que encontramos en ti</div>
+      <p class="diag-text" id="diag-findings"></p>
+    </div>
+
+    <div class="diag-section">
+      <div class="diag-section-title"><span class="diag-section-icon">⚡</span> Tu bloqueo principal</div>
+      <p class="diag-text" id="diag-blocker"></p>
+    </div>
+
+    <div class="diag-section">
+      <div class="diag-section-title"><span class="diag-section-icon">🗓️</span> Tu plan de acción inmediato</div>
+      <div id="diag-plan"></div>
+    </div>
+
+    <div class="cta-box">
+      <h3 class="cta-box-title">¿Lista para dar<br>el siguiente paso? 💛</h3>
+      <p class="cta-box-sub">Envía tus resultados y comencemos a trabajar juntas en tu proceso de crecimiento.</p>
+      <a class="btn-wa" id="btn-wa" href="#">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Enviar mis resultados por WhatsApp
+      </a>
+      <button class="btn-secondary" onclick="showThanks()">No por ahora</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ GRACIAS -->
+  <div class="screen" id="screen-thanks">
+    <div class="thankyou-center">
+      <div class="thankyou-icon">✦</div>
+      <h2 class="thankyou-title">¡Gracias por tu honestidad!</h2>
+      <p class="thankyou-sub">Cada respuesta que diste fue un acto de valentía. Cuando estés lista para dar el siguiente paso, aquí estaremos para acompañarte. 💛</p>
+      <div style="margin-top:32px">
+        <button class="btn-primary" onclick="restart()">Volver al inicio</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /card -->
+<p class="footer">© 2025 · Diagnóstico de Liderazgo · <a href="#" style="color:inherit;text-decoration:none">✦</a></p>
+</div><!-- /app -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  ⚙️  CAMBIA AQUÍ TU NÚMERO DE WHATSAPP (con código de país)
+// ═══════════════════════════════════════════════════════════════
+const telefono = "573000000000";
+// ═══════════════════════════════════════════════════════════════
+
+// ── STATE ──────────────────────────────────────────────────────
+const answers       = {};
+const pillSelects   = {};
+const TOTAL_Q       = 13;
+
+// ── NAVIGATION ─────────────────────────────────────────────────
+function goTo(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + n).classList.add('active');
+  setProgress(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function setProgress(step) {
+  const pct = step === 0 ? 0
+    : (step === 'loading' || step === 'diagnosis' || step === 'thanks') ? 100
+    : Math.round((step / TOTAL_Q) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+// ── SINGLE SELECT ──────────────────────────────────────────────
+function select(q, val, e) {
+  answers[q] = val;
+  document.querySelectorAll('#opts-' + q + ' .option-btn').forEach(b => b.classList.remove('selected'));
+  e.currentTarget.classList.add('selected');
+  enableBtn(q);
+}
+
+// ── SCALE ──────────────────────────────────────────────────────
+function selectScale(q, val, e) {
+  answers[q] = val;
+  document.querySelectorAll('#scale-' + q + ' .scale-btn').forEach(b => b.classList.remove('selected'));
+  e.currentTarget.classList.add('selected');
+  enableBtn(q);
+}
+
+// ── PILLS ──────────────────────────────────────────────────────
+function selectPill(q, val, maxSel, e) {
+  if (!pillSelects[q]) pillSelects[q] = [];
+  const btn = e.currentTarget;
+  if (btn.classList.contains('selected')) {
+    btn.classList.remove('selected');
+    pillSelects[q] = pillSelects[q].filter(v => v !== val);
+  } else {
+    if (pillSelects[q].length >= maxSel) return;
+    btn.classList.add('selected');
+    pillSelects[q].push(val);
+  }
+  answers[q] = pillSelects[q].join(', ');
+  // update dim state
+  const all = document.querySelectorAll('#pills-' + q + ' .pill-btn');
+  all.forEach(b => {
+    if (!b.classList.contains('selected') && pillSelects[q].length >= maxSel) b.classList.add('dimmed');
+    else b.classList.remove('dimmed');
+  });
+  if (pillSelects[q].length > 0) enableBtn(q); else disableBtn(q);
+}
+
+function enableBtn(q) {
+  const b = document.getElementById('next-' + q);
+  if (!b) return;
+  b.disabled = false; b.style.opacity = '1'; b.style.cursor = 'pointer';
+}
+function disableBtn(q) {
+  const b = document.getElementById('next-' + q);
+  if (!b) return;
+  b.disabled = true; b.style.opacity = '.4'; b.style.cursor = 'not-allowed';
+}
+
+// ── LOADING ────────────────────────────────────────────────────
+function showLoading() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-loading').classList.add('active');
+  setProgress('loading');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => { buildDiagnosis(); showDiagnosis(); }, 2800);
+}
+function showDiagnosis() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-diagnosis').classList.add('active');
+  setProgress('diagnosis');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  🧠  MOTOR DE DIAGNÓSTICO
+// ═══════════════════════════════════════════════════════════════
+function computeScore() {
+  let score = 0;
+
+  // P1 - satisfacción (0–10)
+  const sat = answers[1] || 5;
+  score += sat >= 7 ? 2 : sat >= 4 ? 1 : 0;
+
+  // P2 - estado emocional
+  if (answers[2] === 'Enfocada') score += 3;
+  else if (answers[2] === 'Motivada') score += 2;
+  else if (answers[2] === 'Confundida' || answers[2] === 'Sin rumbo') score += 0;
+  else score += 1;
+
+  // P3 - bloqueo (sin puntos directos, usado para texto)
+
+  // P6 - disciplina
+  if (answers[6] === 'Cumplo sí o sí') score += 4;
+  else if (answers[6] === 'Retomo aunque no tenga ganas') score += 3;
+  else if (answers[6] === 'Espero sentirme motivada') score += 1;
+  else score += 0;
+
+  // P7 - mentalidad
+  if (answers[7] === 'Me inspira a mejorar') score += 4;
+  else if (answers[7] === 'Analizo qué hace diferente') score += 3;
+  else if (answers[7] === 'Tuvo suerte') score += 1;
+  else score += 0;
+
+  // P8 - creencia dinero
+  if (answers[8] === 'Se puede generar inteligentemente') score += 3;
+  else if (answers[8] === 'No sé cómo hacerlo') score += 1;
+  else score += 0;
+
+  // P9 - acción
+  if (answers[9] === 'Acción diaria constante') score += 4;
+  else if (answers[9] === 'Estoy empezando') score += 2;
+  else if (answers[9] === 'Solo lo pienso') score += 1;
+  else score += 0;
+
+  // P11 - compromiso
+  if (answers[11] === 'Sí, totalmente') score += 4;
+  else if (answers[11] === 'Me cuesta pero lo intento') score += 2;
+  else if (answers[11] === 'No estoy segura') score += 1;
+  else score += 0;
+
+  // P12 - urgencia
+  const urg = answers[12] || 5;
+  score += urg >= 8 ? 2 : urg >= 5 ? 1 : 0;
+
+  // P13 - inversión
+  if (answers[13] === 'Sí, es mi prioridad') score += 3;
+  else if (answers[13] === 'Sí, pero necesito ver el valor') score += 2;
+  else if (answers[13] === 'Quiero pero tengo limitaciones') score += 1;
+  else score += 0;
+
+  return score; // max ~29
+}
+
+// Perfiles
+const PROFILES = {
+  ready: {
+    level: 'Lista para avanzar',
+    levelClass: 'level-ready',
+    emoji: '🔥',
+    title: 'Estás lista para avanzar',
+    subtitle: 'Tienes la mentalidad, la disposición y la energía. Lo que necesitas ahora es dirección estratégica y el acompañamiento correcto.',
+    message: '"Estás más cerca de lo que crees. El único paso que te falta es comprometerte con la versión de ti que ya sabes que puedes ser."',
+    findings: 'Tu diagnóstico revela una mujer con <strong>mentalidad de crecimiento activa</strong>, buena disposición para la acción y apertura real al cambio. Tienes las bases para crecer — solo necesitas canalizarlo correctamente.',
+    plans: [
+      { title: 'Define tu meta número uno', text: 'Escribe UNA meta específica para los próximos 30 días. No tres, no cinco. Solo una. Con fecha y acción concreta.' },
+      { title: 'Construye una rutina de mañana', text: 'Los primeros 60 minutos del día determinan todo lo demás. Diseña una rutina que incluya mente, cuerpo y estrategia.' },
+      { title: 'Busca acompañamiento estratégico', text: 'Una líder con visión no crece sola. Busca mentoras, comunidades y espacios que te exijan más.' },
+      { title: 'Actúa hoy, no el lunes', text: 'Identifica la acción más importante que puedes hacer hoy mismo y hazla antes de dormir.' },
+      { title: 'Comprométete en voz alta', text: 'Dile a alguien de confianza tu meta. El compromiso público activa algo diferente en tu cerebro.' },
+    ]
+  },
+  blocked: {
+    level: 'Tiene potencial pero está bloqueada',
+    levelClass: 'level-blocked',
+    emoji: '🌱',
+    title: 'Tienes potencial, pero hay bloqueos',
+    subtitle: 'Hay algo poderoso en ti que quiere salir. Lo que te frena no es falta de capacidad — es falta de las herramientas correctas para desbloquear lo que ya tienes.',
+    message: '"El talento que tienes no desaparece por estar dormido. Solo necesita las condiciones correctas para despertar. Y ese trabajo empieza hoy."',
+    findings: 'Tu diagnóstico muestra una mujer con <strong>sueños claros y deseos reales de crecer</strong>, pero con patrones de pensamiento y hábitos que frenan la acción. La buena noticia: todo eso se trabaja y se transforma.',
+    plans: [
+      { title: 'Identifica tu miedo principal', text: 'Escribe en papel: "Lo que más me da miedo es..." y respóndelo con honestidad. Nombrar el miedo lo reduce.' },
+      { title: 'Rompe el ciclo del "mañana"', text: 'Elige UNA acción que has postergado y hazla en los próximos 24 horas. Solo una. Pero hazla.' },
+      { title: 'Cambia lo que estás consumiendo', text: 'Durante 7 días: reduce el contenido que te compara y aumenta el que te inspira a construir.' },
+      { title: 'Rodéate de personas que ya avanzan', text: 'El ambiente lo es todo. Busca una comunidad, un grupo o una mentora que ya esté donde tú quieres estar.' },
+      { title: 'Documenta tus pequeños avances', text: 'Cada noche escribe UNA cosa que hiciste hoy para avanzar. Lo pequeño también cuenta.' },
+    ]
+  },
+  notready: {
+    level: 'En proceso de despertar',
+    levelClass: 'level-notready',
+    emoji: '🌙',
+    title: 'Estás en proceso de despertar',
+    subtitle: 'El hecho de que estés aquí respondiendo esta encuesta ya dice algo importante de ti. Algo en ti quiere despertar — aunque todavía no hayas dado el primer paso.',
+    message: '"No estás atrasada. Estás exactamente donde necesitas estar para empezar a cambiar. La pregunta no es si estás lista — es si estás dispuesta."',
+    findings: 'Tu diagnóstico refleja una mujer en una <strong>etapa de reflexión y reconocimiento</strong>. Todavía no has activado la acción, pero algo en ti ya está buscando el cambio. Eso es el primer paso.',
+    plans: [
+      { title: 'Hazte UNA pregunta poderosa hoy', text: '¿Cómo me voy a sentir dentro de 5 años si sigo haciendo exactamente lo mismo que hoy? Escríbelo.' },
+      { title: 'Lee 10 páginas de un libro de crecimiento', text: 'Empieza a alimentar tu mente con ideas nuevas. Solo 10 páginas al día cambian tu perspectiva en semanas.' },
+      { title: 'Habla con alguien que te inspire', text: 'Busca una conversación real con alguien que esté avanzando. Deja que su energía te contagie.' },
+      { title: 'Escribe tu "por qué"', text: '¿Por qué quieres crecer? ¿Para quién? ¿Qué imagen de ti misma te gustaría tener? Escríbelo hoy.' },
+      { title: 'Da solo UN paso hoy', text: 'No necesitas tener todo claro para empezar. Solo necesitas dar un paso. Uno solo. El que sea.' },
+    ]
+  }
+};
+
+function getProfile(score) {
+  if (score >= 20) return 'ready';
+  if (score >= 11) return 'blocked';
+  return 'notready';
+}
+
+// ── BUILD DIAGNOSIS ────────────────────────────────────────────
+function buildDiagnosis() {
+  const score   = computeScore();
+  const pKey    = getProfile(score);
+  const p       = PROFILES[pKey];
+  const blocker = answers[3] || 'No especificado';
+  const commit  = answers[11] || 'No especificado';
+  const action  = answers[9]  || 'No especificado';
+  const change  = answers[4]  || 'No especificado';
+  const skills  = answers[10] || 'No especificado';
+
+  // Inject content
+  const badge = document.getElementById('diag-level-badge');
+  badge.textContent  = p.level;
+  badge.className    = 'diag-level-badge ' + p.levelClass;
+  document.getElementById('diag-emoji').textContent    = p.emoji;
+  document.getElementById('diag-title').textContent    = p.title;
+  document.getElementById('diag-subtitle').textContent = p.subtitle;
+  document.getElementById('diag-message').textContent  = p.message;
+  document.getElementById('diag-findings').innerHTML   = p.findings;
+
+  // Blocker
+  document.getElementById('diag-blocker').innerHTML =
+    `Tu principal bloqueo identificado es: <strong>${blocker}</strong>. Este es el área donde más necesitas trabajar y donde el acompañamiento correcto puede hacer la mayor diferencia.`;
+
+  // Plan
+  const planEl = document.getElementById('diag-plan');
+  planEl.innerHTML = p.plans.map((step, i) => `
+    <div class="plan-step">
+      <div class="plan-step-num">${i+1}</div>
+      <div class="plan-step-text"><strong>${step.title}:</strong> ${step.text}</div>
+    </div>
+  `).join('');
+
+  // WhatsApp message
+  const sat     = answers[1]  || '—';
+  const emotion = answers[2]  || '—';
+  const urgency = answers[12] || '—';
+
+  const waMsg = [
+    `Hola, acabo de hacer la encuesta de diagnóstico de liderazgo.`,
+    ``,
+    `*Mi resultado fue:*`,
+    ``,
+    `📊 *Nivel:* ${p.level}`,
+    `💫 *Perfil:* ${p.title}`,
+    ``,
+    `*Mis respuestas clave:*`,
+    `• Satisfacción actual: ${sat}/10`,
+    `• Estado emocional: ${emotion}`,
+    `• Bloqueo principal: ${blocker}`,
+    `• Quiero cambiar: ${change}`,
+    `• Nivel de acción: ${action}`,
+    `• Mis habilidades: ${skills}`,
+    `• Compromiso: ${commit}`,
+    `• Urgencia de cambio: ${urgency}/10`,
+    ``,
+    `_Quiero saber cómo avanzar y recibir acompañamiento._ ✦`
+  ].join('\n');
+
+  document.getElementById('btn-wa').href =
+    `https://wa.me/${telefono}?text=${encodeURIComponent(waMsg)}`;
+}
+
+// ── UTILS ──────────────────────────────────────────────────────
+function showThanks() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-thanks').classList.add('active');
+  setProgress('thanks');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  Object.keys(pillSelects).forEach(k => delete pillSelects[k]);
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected','dimmed'));
+  for (let i = 1; i <= TOTAL_Q; i++) disableBtn(i);
+  goTo(0);
+}
+</script>
+</body>
+</html>
